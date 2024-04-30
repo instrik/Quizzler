@@ -1,93 +1,74 @@
-// ignore_for_file: prefer_const_constructors, prefer_final_fields, sort_child_properties_last
+// ignore_for_file: sort_child_properties_last, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:flutter/material.dart';
-import 'Question.dart';
+import 'question.dart';
+import 'main.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:flutter/material.dart';
 
 class QuizBrain {
-  int _i = 0, score = 0;
-
-  List<Question> _questionBank = [
-    Question(a: 'Abhijeet is buffalo.', b: true),
-    Question(a: 'Jaymin is giraffe.', b: false),
-    Question(a: 'Aakash is giraffe.', b: true),
-    Question(a: 'Het is horse.', b: true),
-    Question(a: 'Prateek is teddy bear.', b: true),
+  List<Question> questionBank = [
+    Question(q: '1 + 1 = 2', a: true),
+    Question(q: '4 - 4 = 0', a: true),
+    Question(q: '9 - 3 = 5', a: false),
+    Question(q: '9 - 5 = 4', a: true),
+    Question(q: '7 - 3 = 6', a: false),
+    Question(q: '1 + 1 = 2', a: true),
+    Question(q: '4 - 4 = 0', a: true),
+    Question(q: '9 - 3 = 5', a: false),
+    Question(q: '9 - 5 = 4', a: true),
+    Question(q: '7 - 3 = 6', a: false),
   ];
 
-  List<Widget> scores = [
-    Icon(
-      Icons.remove,
-      color: Colors.yellowAccent,
-    ),
-    Icon(
-      Icons.remove,
-      color: Colors.yellowAccent,
-    ),
-    Icon(
-      Icons.remove,
-      color: Colors.yellowAccent,
-    ),
-    Icon(
-      Icons.remove,
-      color: Colors.yellowAccent,
-    ),
-    Icon(
-      Icons.remove,
-      color: Colors.yellowAccent,
-    ),
-  ];
-
-  updateIcon(bool userAnswer) {
-    if (getCorrectAnswer(userAnswer)) {
-      scores[_i] = Icon(Icons.check, color: Colors.green);
-      score++;
-    } else {
-      scores[_i] = Icon(Icons.cancel, color: Colors.red);
-    }
-  }
-
-  void nextQuestion(BuildContext context) {
-    if (_i < _questionBank.length - 1) {
-      _i++;
-    } else {
-      // alert program
+  void nextQuestion() {
+    if (quizzler.questionNumber == questionBank.length) {
       Alert(
         context: context,
         type: AlertType.warning,
-        title: "Game Over",
-        desc: "scored ${100 * score / scores.length}% marks",
+        title: "QUIZ OVER",
+        desc: "please restart the app to play again",
         buttons: [
           DialogButton(
             child: Text(
-              "Restart",
-              style: TextStyle(color: Colors.black, fontSize: 20),
+              "Back",
+              style: TextStyle(color: Colors.white, fontSize: 20),
             ),
-            onPressed: () {
-              _i = 0;
-              score = 0;
-              Navigator.pop(context);
-            },
-            color: Colors.green,
+            onPressed: () => Navigator.pop(context),
+            color: Color.fromRGBO(0, 179, 134, 1.0),
           ),
           DialogButton(
             child: Text(
               "Exit",
-              style: TextStyle(color: Colors.black, fontSize: 20),
+              style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             onPressed: () => Navigator.pop(context),
-            color: Colors.red,
-          ),
+            gradient: LinearGradient(colors: [
+              Color.fromRGBO(116, 116, 191, 1.0),
+              Color.fromRGBO(52, 138, 199, 1.0)
+            ]),
+          )
         ],
       ).show();
+    } else
+      questionNumber++;
+  }
+
+  void checkAnswer() {
+    bool correctAnswer =
+        quizBrain.questionBank[questionNumber].questionAnswer; //to be checked
+    if (correctAnswer == true) {
+      scoreKeeper.add(
+        Icon(
+          Icons.check,
+          color: Colors.green,
+        ),
+      );
+    } else {
+      scoreKeeper.add(
+        Icon(
+          Icons.close,
+          color: Colors.red,
+        ),
+      );
     }
-  }
-
-  String getQuestionText() {
-    return _questionBank[_i].questionText!;
-  }
-
-  bool getCorrectAnswer(bool userAnswer) {
-    return userAnswer == _questionBank[_i].answer!;
   }
 }
