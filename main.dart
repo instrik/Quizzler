@@ -5,7 +5,7 @@ import 'package:quizzler/Question.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'quiz_brain.dart';
 
-// trail comment 6
+// trail comment
 
 QuizBrain quizBrain = QuizBrain();
 
